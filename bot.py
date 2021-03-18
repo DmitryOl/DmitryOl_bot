@@ -1,4 +1,4 @@
-#!/home/dmitry/tgBot/venv/bin/python
+#!/home/dmitry/DmitryOl_bot/venv/bin/python
 import config
 import logging
 
