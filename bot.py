@@ -1,3 +1,4 @@
+#!/home/dmitry/DmitryOl_bot/venv/bin/python
 import config
 import logging
 
