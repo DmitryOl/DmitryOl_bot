@@ -2,6 +2,7 @@
 import config
 import logging
 
+import subprocess
 from aiogram import Bot, Dispatcher, executor, types
 
 # yroven log
@@ -13,7 +14,7 @@ dp = Dispatcher(bot)
 
 # hendler na komandy /about
 @dp.message_handler(commands="about")
-async def cmd_test1(message: types.Message):
+async def about(message: types.Message):
     await message.reply("""
     О боте, что я умею:
         - вести учет расходов
@@ -21,10 +22,29 @@ async def cmd_test1(message: types.Message):
         - записи
     """)
 
+# hendler na komandy /cmd
+@dp.message_handler(commands="cmd")
+async def cmd(message: types.Message):
+    if message.text == "/cmd":
+        # command = 'git status '
+        command = "git status"
+        per = subprocess.check_output(command, shell = True)
+        await message.answer(per.decode('utf-8'))
+
+    else:
+        await message.answer(message.text)
+
+
 #  echo
 @dp.message_handler()
 async def echo(message: types.Message):
-    await message.answer(message.text)
+    if message.text[:3] == 'cmd' and config.M_C_ID == str(message.chat.id) :
+        command = message.text[3:]
+        per = subprocess.check_output(command, shell = True)
+        await message.answer(f"{message.text[3:]} :\n {per.decode('utf-8')}")
+
+    else:
+        await message.answer(message.text)
 
 
 
