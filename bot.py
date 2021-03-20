@@ -32,7 +32,8 @@ async def cmd(message: types.Message):
         if run_platform[0] == "W":
             command = "git status"
         else:
-            command = "cd /home/dmitry/DmitryOl_bot/ && git status"
+            # command = "cd /home/dmitry/DmitryOl_bot/ && git status && "
+            command = "проверка запуска баш скрипта"
         per = subprocess.check_output(command, shell = True)
         await message.answer(per.decode('utf-8'))
 
