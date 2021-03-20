@@ -28,16 +28,8 @@ async def about(message: types.Message):
 async def cmd(message: types.Message):
     if message.text == "/cmd":
         # command = 'git status '
-        run_platform = platform.system()
-        if run_platform == "Windows":
-            command = "git status"
-        elif run_platform == "Linux":
-            # command = "cd /home/dmitry/DmitryOl_bot/ && git status && "
-            command = "echo 'проверка запуска баш скрипта' "
-        else:
-            await message.answer("Другая система, не Windows и не Linux")
-        per = subprocess.check_output(command, shell = True)
-        await message.answer(per.decode('utf-8'))
+            per = check_cmd()
+            await message.answer(per)
 
     else:
         await message.answer(message.text)
@@ -47,12 +39,28 @@ async def cmd(message: types.Message):
 @dp.message_handler()
 async def echo(message: types.Message):
     if message.text[:3] == 'cmd' and config.M_C_ID == str(message.chat.id) :
-        command = message.text[3:]
-        per = subprocess.check_output(command, shell = True)
-        await message.answer(f"{message.text[3:]} :\n {per.decode('utf-8')}")
-
+        per = check_cmd(message.text[3:])
+        await message.answer(f"{message.text[3:]} :\n {per}")
     else:
-        await message.answer(message.text)
+        await message.answer(f"нет прав на запуск команды: {message.text}")
+
+    await message.answer("я все равно запускаюсь!!!!")
+
+
+def check_cmd(cmd=""):
+    # run_platform = platform.system()
+    # if run_platform == "Windows":
+    #     command = f"echo 'запуск на {run_platform}' "
+    # elif run_platform == "Linux":
+    #     command = f"echo 'запуск на {run_platform}' "
+    # else:
+    #     return f"Другая система, не Windows и не Linux"
+    
+    if cmd != '':
+        return subprocess.check_output(cmd, shell = True).decode('CP866')
+    else:
+        return f"запуск на {platform.system()} "
+
 
 
 
