@@ -30,7 +30,6 @@ async def cmd(message: types.Message):
         # command = 'git status '
             per = check_cmd()
             await message.answer(per)
-
     else:
         await message.answer(message.text)
 
@@ -47,20 +46,13 @@ async def echo(message: types.Message):
     await message.answer("я все равно запускаюсь!!!!")
 
 
-def check_cmd(cmd=""):
-    # run_platform = platform.system()
-    # if run_platform == "Windows":
-    #     command = f"echo 'запуск на {run_platform}' "
-    # elif run_platform == "Linux":
-    #     command = f"echo 'запуск на {run_platform}' "
-    # else:
-    #     return f"Другая система, не Windows и не Linux"
-    
+
+#вынести проверку в отдельный файл
+def check_cmd(cmd=""):    
     if cmd != '':
-        return subprocess.check_output(cmd, shell = True).decode('CP866')
+        return subprocess.check_output(cmd, shell = True).decode('utf-8')
     else:
         return f"запуск на {platform.system()} "
-
 
 
 
