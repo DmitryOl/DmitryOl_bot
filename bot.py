@@ -1,10 +1,11 @@
 #!/home/dmitry/DmitryOl_bot/venv/bin/python
 import config
 import logging
+from aiogram import Bot, Dispatcher, executor, types
 
 import platform
 import subprocess
-from aiogram import Bot, Dispatcher, executor, types
+
 
 # yroven log
 logging.basicConfig(level=logging.INFO)
@@ -17,17 +18,19 @@ dp = Dispatcher(bot)
 @dp.message_handler(commands="about")
 async def about(message: types.Message):
     await message.reply("""
-    О боте, что я умею:
+    О боте, что я хочу сделать:
         - вести учет расходов
         - трекер дел
         - записи
+    Что я умею:
+        - Определять на какой системе запущен /cmd
+        - Отправлять серверу сообщения через "cmd "
     """)
 
 # hendler na komandy /cmd
 @dp.message_handler(commands="cmd")
 async def cmd(message: types.Message):
     if message.text == "/cmd":
-        # command = 'git status '
             per = check_cmd()
             await message.answer(per)
     else:
@@ -35,15 +38,16 @@ async def cmd(message: types.Message):
 
 
 #  echo
+# передать проверку в отдельный файл со своей логикой?
 @dp.message_handler()
 async def echo(message: types.Message):
     if message.text[:3] == 'cmd' and config.M_C_ID == str(message.chat.id) :
         per = check_cmd(message.text[3:])
         await message.answer(f"{message.text[3:]} :\n {per}")
+    elif message.text[:3] == 'cmd' and config.M_C_ID != str(message.chat.id) :
+        await message.answer(f"нет прав на запуск команды: {message.text[3:]}")
     else:
-        await message.answer(f"нет прав на запуск команды: {message.text}")
-
-    await message.answer("я все равно запускаюсь!!!!")
+        await message.answer(f"ваше сообщение: {message.text}")
 
 
 
