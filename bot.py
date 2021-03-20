@@ -29,11 +29,13 @@ async def cmd(message: types.Message):
     if message.text == "/cmd":
         # command = 'git status '
         run_platform = platform.system()
-        if run_platform[0] == "W":
+        if run_platform == "Windows":
             command = "git status"
-        else:
+        elif run_platform == "Linux"::
             # command = "cd /home/dmitry/DmitryOl_bot/ && git status && "
             command = "echo 'проверка запуска баш скрипта' "
+        else:
+            await message.answer("Другая система, не Windows и не Linux")
         per = subprocess.check_output(command, shell = True)
         await message.answer(per.decode('utf-8'))
 
