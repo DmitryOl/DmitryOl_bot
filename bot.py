@@ -2,6 +2,7 @@
 import config
 import logging
 
+import platform
 import subprocess
 from aiogram import Bot, Dispatcher, executor, types
 
@@ -27,7 +28,11 @@ async def about(message: types.Message):
 async def cmd(message: types.Message):
     if message.text == "/cmd":
         # command = 'git status '
-        command = "git status"
+        run_platform = platform.system()
+        if run_platform[0] == "W":
+            command = "git status"
+        else:
+            command = "cd /home/dmitry/DmitryOl_bot/ && git status"
         per = subprocess.check_output(command, shell = True)
         await message.answer(per.decode('utf-8'))
 
