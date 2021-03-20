@@ -31,7 +31,7 @@ async def cmd(message: types.Message):
         run_platform = platform.system()
         if run_platform == "Windows":
             command = "git status"
-        elif run_platform == "Linux"::
+        elif run_platform == "Linux":
             # command = "cd /home/dmitry/DmitryOl_bot/ && git status && "
             command = "echo 'проверка запуска баш скрипта' "
         else:
