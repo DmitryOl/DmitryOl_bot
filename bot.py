@@ -2,6 +2,7 @@
 import config
 import logging
 from aiogram import Bot, Dispatcher, executor, types
+from SQLite_connect import SQLite_conn
 
 import platform
 import subprocess
@@ -13,6 +14,22 @@ logging.basicConfig(level=logging.INFO)
 # init bot
 bot = Bot(token=config.API_TOKEN)
 dp = Dispatcher(bot)
+
+#подключаемся к БД
+db = SQLite_conn('db_tgBot')
+
+
+# выводим всех пользоватлей
+@dp.message_handler(commands="usr_db")
+async def usr_db(message: types.Message):
+    if (not db.user_find(message.from_user.id)):
+        # если новый, добавляем в базу
+        db.user_add(message.from_user.id)
+        await message.answer("вы добавлены!")
+
+    all_user = db.user_exists() 
+    await message.answer(all_user)
+
 
 # hendler na komandy /about
 @dp.message_handler(commands="about")

@@ -8,18 +8,23 @@ class SQLite_conn:
         self.connection = sqlite3.connect(database)
         self.cursor = self.connection.cursor()
 
-    def user_add(self, user_id, date_reg = datetime.datetime.now()):
+    def user_add(self, id_user, data_reg = datetime.datetime.now()):
         """добавляем нового пользователя"""
-        print (date_reg)
-
         with self.connection:
-            return self.cursor.execute("INSERT INTO `user` (`user_id`, `date_reg`) VALUES(?,?)", (user_id, date_reg))
+            return self.cursor.execute("INSERT INTO `user` (`id_user`, `data_reg`) VALUES(?,?)", (id_user, data_reg))
 
-    def user_exists(self, user_id):
+    def user_exists(self):
         """получаем всех пользователей"""
         with self.connection:
-            return self.cursor.execute("Select * FROM `user`").fetchall()
+            return self.cursor.execute("SELECT * FROM `user` ").fetchall()
+
+    def user_find(self, id_user):
+        """есть ли такой пользователь?"""
+        with self.connection:
+            result = self.cursor.execute('SELECT * FROM `user` WHERE `id_user` = ?', (id_user,)).fetchall()
+            return bool(len(result))
     
     def close(self):
         """закрываем соединение с БД"""
         self.connection.close()
+
