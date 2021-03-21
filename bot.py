@@ -16,7 +16,10 @@ bot = Bot(token=config.API_TOKEN)
 dp = Dispatcher(bot)
 
 #подключаемся к БД
-db = SQLite_conn('db_tgBot')
+if platform.system() == "Windows":
+    db = SQLite_conn('db_tgBot')
+elif platform.system() == "Linux":
+    db = SQLite_conn('/home/dmitry/DmitryOl_bot/db_tgBot')
 
 
 # выводим всех пользоватлей
