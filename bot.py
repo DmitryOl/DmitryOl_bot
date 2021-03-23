@@ -61,6 +61,7 @@ async def cmd(message: types.Message):
 # передать проверку в отдельный файл со своей логикой?
 @dp.message_handler()
 async def echo(message: types.Message):
+    add_mes(message.chat.id)
     if message.text[:3] == 'cmd' and config.M_C_ID == str(message.chat.id) :
         per = check_cmd(message.text[3:])
         await message.answer(f"{message.text[3:]} :\n {per}")
@@ -78,6 +79,12 @@ def check_cmd(cmd=""):
     else:
         return f"запуск на {platform.system()} "
 
+def add_mes(id_user):    
+    if (not db.user_find(id_user)):
+        # если новый, добавляем в базу
+        db.user_add(id_user)
+    # получаем начало строки
+    
 
 
 # run bot
