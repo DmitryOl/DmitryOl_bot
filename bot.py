@@ -17,9 +17,9 @@ dp = Dispatcher(bot)
 
 #подключаемся к БД
 if platform.system() == "Windows":
-    db = SQLite_conn('db_tgBot')
+    db = SQLite_conn('db_tgBot.db')
 elif platform.system() == "Linux":
-    db = SQLite_conn('/home/dmitry/DmitryOl_bot/db_tgBot')
+    db = SQLite_conn('/home/dmitry/DmitryOl_bot/db_tgBot.db')
 
 
 # выводим всех пользоватлей
