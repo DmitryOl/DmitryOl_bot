@@ -1,5 +1,5 @@
 #убираем конфиг из репы.
 config.py
-db_tgBot
+db_tgBot.db
 \_\_pycache\_\_
 venv
