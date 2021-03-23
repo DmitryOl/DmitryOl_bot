@@ -24,6 +24,13 @@ class SQLite_conn:
             result = self.cursor.execute('SELECT * FROM `user` WHERE `id_user` = ?', (id_user,)).fetchall()
             return bool(len(result))
     
+    def add_mess(self, id_user, mes, data_reg = datetime.datetime.now()):
+        """записываем в базу сообщение и id user"""
+        with self.connection:
+            self.cursor.execute("INSERT INTO `wallet` (`wallet_id_user`, `wallet_note`,`wallet_datatime`) VALUES(?,?,?)",(id_user, mes, data_reg))
+            self.cursor.execute("UPDATE `user` SET `last_mes_data` = ?, `last_mes` = ? WHERE `id_user` = ?",( data_reg, mes, id_user))
+            return "GOOD"
+    
     def close(self):
         """закрываем соединение с БД"""
         self.connection.close()

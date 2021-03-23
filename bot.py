@@ -25,10 +25,7 @@ elif platform.system() == "Linux":
 # выводим всех пользоватлей
 @dp.message_handler(commands="usr_db")
 async def usr_db(message: types.Message):
-    if (not db.user_find(message.from_user.id)):
-        # если новый, добавляем в базу
-        db.user_add(message.from_user.id)
-        await message.answer("вы добавлены!")
+    add_mes(message.chat.id, message.text)
 
     all_user = db.user_exists() 
     await message.answer(all_user)
@@ -61,7 +58,7 @@ async def cmd(message: types.Message):
 # передать проверку в отдельный файл со своей логикой?
 @dp.message_handler()
 async def echo(message: types.Message):
-    add_mes(message.chat.id)
+    add_mes(message.chat.id, message.text)
     if message.text[:3] == 'cmd' and config.M_C_ID == str(message.chat.id) :
         per = check_cmd(message.text[3:])
         await message.answer(f"{message.text[3:]} :\n {per}")
@@ -79,11 +76,12 @@ def check_cmd(cmd=""):
     else:
         return f"запуск на {platform.system()} "
 
-def add_mes(id_user):    
-    if (not db.user_find(id_user)):
+def add_mes(user_id, user_mes):    
+    if (not db.user_find(user_id)):
         # если новый, добавляем в базу
-        db.user_add(id_user)
+        db.user_add(user_id)
     # получаем начало строки
+    db.add_mess(user_id, user_mes)
     
 
 
