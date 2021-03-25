@@ -6,6 +6,7 @@ from SQLite_connect import SQLite_conn
 
 import platform
 import subprocess
+import re
 
 
 # yroven log
@@ -80,11 +81,30 @@ def add_mes(user_id, user_mes):
     if (not db.user_find(user_id)):
         # если новый, добавляем в базу
         db.user_add(user_id)
-    # получаем начало строки
-    db.add_mess(user_id, user_mes)
+
+    # распределяем сообщения по подходящим таблицам
+    rslt = user_mes.split(' ')
+    if rslt[0] == 'м' or rslt[0] == 'М': # если первое слово "м" то в мысли
+        mes = re.sub('^\w{1}\s+', '', user_mes)
+        db.add_mess_mind(user_id, mes)
+
+    elif re.search('^\d', rslt[0]):     # если первое слово цифры, то в кошель
+        val = rslt[0]
+        cat = rslt[1]
+        note = ' '.join(rslt[2:])
+        db.add_mess_wal(user_id, val, cat, note)
+
+    elif re.search('^\w+', rslt[0]): # если первое слово буквы то в действия
+        if re.search('\d+:\d\d', rslt[-1]):
+            times = rslt[-1]
+            note = ' '.join(rslt[:-1])
+            db.add_mess_action(user_id, note, times)
+        else:
+            note = user_mes
+            db.add_mess_action(user_id, note)
+
+
     
-
-
 # run bot
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
