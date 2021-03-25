@@ -45,12 +45,17 @@ async def about(message: types.Message):
         - Отправлять серверу сообщения через "cmd "
     """)
 
+
 # hendler na komandy /cmd
 @dp.message_handler(commands="cmd")
 async def cmd(message: types.Message):
     if message.text == "/cmd":
-            per = check_cmd()
-            await message.answer(per)
+        per = check_cmd()
+        await message.answer(per)
+    elif config.M_C_ID == str(message.chat.id):
+        await message.answer(f"run {message.text[4:]}")
+        subprocess.run(message.text[4:], shell = True , stdin = None , input = None , stdout = None ,)
+
     else:
         await message.answer(message.text)
 
