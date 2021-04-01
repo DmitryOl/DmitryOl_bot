@@ -1,3 +1,6 @@
+#python3 -m venv venv
+#source venv/bin/activate
+#pip install -r requirements.txt
 aiogram==2.12
 aiohttp==3.7.4.post0
 async-timeout==3.0.1
@@ -8,6 +11,8 @@ certifi==2020.12.5
 chardet==4.0.0
 idna==3.1
 multidict==5.1.0
+pytube==12.1.2
 pytz==2021.1
 typing-extensions==3.7.4.3
 yarl==1.6.3
+
