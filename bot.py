@@ -105,7 +105,7 @@ async def download_yt_music(url, message, bot):
     yt.streams.filter(only_audio=True).first().download(filename=name)
     with open(f"{name}", 'rb') as audio:
         await bot.send_audio(message.chat.id, audio, caption=f"{name}")
-        audio.close()
+        os.remove(f"{name}")
 
 
 #вынести проверку в отдельный файл
