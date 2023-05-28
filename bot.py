@@ -11,7 +11,7 @@ import re
 
 from pytube import YouTube
 import os
-
+from time import sleep
 # yroven log
 logging.basicConfig(level=logging.INFO)
 
@@ -75,8 +75,20 @@ async def echo(message: types.Message):
         await message.answer(f"нет прав на запуск команды: {message.text[3:]}")
     elif message.text[:2] in  ['yt', 'Yt'] and config.M_C_ID == str(message.chat.id) :
         chat_id = message.chat.id
-        url = message.text[2:]
+        url = message.text[3:]
+        print(url)
         yt = YouTube(url)
+        # while True:
+        #     try:
+        #         title = yt.title
+        #         break
+        #     except:
+        #         print("Failed to get name. Retrying...")
+        #         sleep(1)
+        #         yt = YouTube(url)
+        #         continue
+        # yt = YouTube(url)
+        # yt = YouTube("https://youtu.be/mWNN8hpXS-A")
         if message.text.startswith == 'https://www.youtube.com/' or 'https://youtu.be/':
             await bot.send_message(chat_id, f"Начинаю загрузку видео* : *{yt.title}*\n"
             f"*С канала *: [{yt.author}]({yt.channel_url})")
