@@ -11,7 +11,7 @@ import re
 
 from pytube import YouTube
 import os
-
+from time import sleep
 # yroven log
 logging.basicConfig(level=logging.INFO)
 
@@ -24,7 +24,7 @@ if platform.system() == "Windows":
     db = SQLite_conn('database/db_tgBot.db')
 elif platform.system() == "Linux":
     db = SQLite_conn('/home/dmitry/DmitryOl_bot/database/db_tgBot.db')
-
+db.check_table()
 
 # выводим всех пользоватлей
 @dp.message_handler(commands="usr_db")
@@ -75,8 +75,20 @@ async def echo(message: types.Message):
         await message.answer(f"нет прав на запуск команды: {message.text[3:]}")
     elif message.text[:2] in  ['yt', 'Yt'] and config.M_C_ID == str(message.chat.id) :
         chat_id = message.chat.id
-        url = message.text[2:]
+        url = message.text[3:]
+        print(url)
         yt = YouTube(url)
+        # while True:
+        #     try:
+        #         title = yt.title
+        #         break
+        #     except:
+        #         print("Failed to get name. Retrying...")
+        #         sleep(1)
+        #         yt = YouTube(url)
+        #         continue
+        # yt = YouTube(url)
+        # yt = YouTube("https://youtu.be/mWNN8hpXS-A")
         if message.text.startswith == 'https://www.youtube.com/' or 'https://youtu.be/':
             await bot.send_message(chat_id, f"Начинаю загрузку видео* : *{yt.title}*\n"
             f"*С канала *: [{yt.author}]({yt.channel_url})")
@@ -142,6 +154,20 @@ def add_mes(user_id, user_mes):
             note = user_mes
             db.add_mess_action(user_id, note)
 
+def create_table(db):
+    newt= db.cursor()
+    newt.execute("""
+    CREATE TABLE user (
+        id_user       INTEGER  PRIMARY KEY
+                               NOT NULL,
+        name          STRING,
+        data_reg      TIME,
+        last_mes_data DATETIME,
+        last_mes_id   INT,
+        last_mes      TEXT
+    );
+    """)
+    db.commit()
 
 
 # run bot
