@@ -1,5 +1,18 @@
 import sqlite3
 import datetime 
+tablelist = {
+    "user": "id_user INTEGER  PRIMARY KEY NOT NULL, name STRING, data_reg TIME, \
+             last_mes_data DATETIME, last_mes_id INT, last_mes TEXT",
+    "wallet": "wallet_id INTEGER PRIMARY KEY AUTOINCREMENT, wallet_cat TEXT REFERENCES categories (category),\
+              wallet_id_user INT REFERENCES user (id_user), wallet_value DOUBLE, \
+              wallet_note TEXT, wallet_datatime DATETIME",
+    "mind_notes": "mind_id INTEGER PRIMARY KEY AUTOINCREMENT, mind_id_user INTEGER REFERENCES \
+                    user (id_user) ON DELETE RESTRICT ON UPDATE RESTRICT NOT NULL, mind_datatime DATETIME, \
+                    mind_note TEXT NOT NULL",
+    "action_notes": "action_id INTEGER PRIMARY KEY AUTOINCREMENT, action_id_user INTEGER REFERENCES user (id_user), \
+                       action_datatime DATETIME, action_note TEXT NOT NULL, action_time DATETIME",
+    "download": "user_id INT, type TEXT, link TEXT, title TEXT, date DATETIME",
+}
 
 class SQLite_conn:
 
@@ -47,7 +60,12 @@ class SQLite_conn:
         with self.connection:
             return self.cursor.execute("INSERT INTO `action_notes` (`action_id_user`, `action_note`, `action_time`, `action_datatime`) VALUES(?,?,?,?)", (id_user, note, time, data_reg))
  
-    
+    def check_table(self):
+        with self.connection:
+            for table in tablelist:
+                if not self.cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table}'").fetchall():
+                    self.cursor.execute(f"CREATE TABLE {table} ({tablelist[table]})")
+
     def close(self):
         """закрываем соединение с БД"""
         self.connection.close()

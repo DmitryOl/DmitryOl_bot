@@ -24,7 +24,7 @@ if platform.system() == "Windows":
     db = SQLite_conn('database/db_tgBot.db')
 elif platform.system() == "Linux":
     db = SQLite_conn('/home/dmitry/DmitryOl_bot/database/db_tgBot.db')
-
+db.check_table()
 
 # выводим всех пользоватлей
 @dp.message_handler(commands="usr_db")
@@ -154,6 +154,20 @@ def add_mes(user_id, user_mes):
             note = user_mes
             db.add_mess_action(user_id, note)
 
+def create_table(db):
+    newt= db.cursor()
+    newt.execute("""
+    CREATE TABLE user (
+        id_user       INTEGER  PRIMARY KEY
+                               NOT NULL,
+        name          STRING,
+        data_reg      TIME,
+        last_mes_data DATETIME,
+        last_mes_id   INT,
+        last_mes      TEXT
+    );
+    """)
+    db.commit()
 
 
 # run bot
