@@ -67,32 +67,19 @@ async def cmd(message: types.Message):
 # передать проверку в отдельный файл со своей логикой?
 @dp.message_handler()
 async def echo(message: types.Message):
-    add_mes(message.chat.id, message.text)
     if message.text[:3] == 'cmd' and config.M_C_ID == str(message.chat.id) :
         per = check_cmd(message.text[3:])
         await message.answer(f"{message.text[3:]} :\n {per}")
     elif message.text[:3] == 'cmd' and config.M_C_ID != str(message.chat.id) :
         await message.answer(f"нет прав на запуск команды: {message.text[3:]}")
-    elif message.text[:2] in  ['yt', 'Yt'] and config.M_C_ID == str(message.chat.id) :
+    elif message.text[:2] in ['yt', 'Yt'] and config.M_C_ID == str(message.chat.id) :
         chat_id = message.chat.id
         url = message.text[3:]
-        print(url)
         yt = YouTube(url)
-        # while True:
-        #     try:
-        #         title = yt.title
-        #         break
-        #     except:
-        #         print("Failed to get name. Retrying...")
-        #         sleep(1)
-        #         yt = YouTube(url)
-        #         continue
-        # yt = YouTube(url)
-        # yt = YouTube("https://youtu.be/mWNN8hpXS-A")
         if message.text.startswith == 'https://www.youtube.com/' or 'https://youtu.be/':
             await bot.send_message(chat_id, f"Начинаю загрузку видео* : *{yt.title}*\n"
             f"*С канала *: [{yt.author}]({yt.channel_url})")
-            await download_yt_video(url, message, bot)
+            await download_yt_video(yt, message, bot)
     elif message.text[:2] in ['ym', 'Ym'] and config.M_C_ID == str(message.chat.id):
         chat_id = message.chat.id
         url = message.text[2:]
@@ -100,16 +87,16 @@ async def echo(message: types.Message):
         if message.text.startswith == 'https://www.youtube.com/' or 'https://youtu.be/':
             await download_yt_music(url, message, bot)
     else:
+        add_mes(message.chat.id, message.text)
         await message.answer(f"ваше сообщение: {message.text}")
 
 
-async def download_yt_video(url, message, bot):
-    yt = YouTube(url)
+async def download_yt_video(yt, message, bot):
     stream = yt.streams.filter(progressive=True, file_extension="mp4", res="360p")
-    stream.get_highest_resolution().download(f'{message.chat.id}', f'{message.chat.id}_{yt.title}')
-    with open(f"{message.chat.id}/{message.chat.id}_{yt.title}", 'rb') as video:
+    stream.get_highest_resolution().download(f'{message.chat.id}', f'{message.chat.id}')
+    with open(f"{message.chat.id}/{message.chat.id}", 'rb') as video:
         await bot.send_video(message.chat.id, video, caption=yt.title)
-        os.remove(f"{message.chat.id}/{message.chat.id}_{yt.title}")
+        os.remove(f"{message.chat.id}/{message.chat.id}")
 
 async def download_yt_music(url, message, bot):
     yt = YouTube(url)
