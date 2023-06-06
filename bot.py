@@ -21,9 +21,9 @@ dp = Dispatcher(bot)
 
 #подключаемся к БД
 if platform.system() == "Windows":
-    db = SQLite_conn('database/db_tgBot.db')
+    db = SQLite_conn('db_tgBot.db')
 elif platform.system() == "Linux":
-    db = SQLite_conn('/home/dmitry/DmitryOl_bot/database/db_tgBot.db')
+    db = SQLite_conn('/home/dmitry/DmitryOl_bot/db_tgBot.db')
 db.check_table()
 
 # выводим всех пользоватлей
@@ -77,7 +77,7 @@ async def echo(message: types.Message):
         url = message.text[3:]
         yt = YouTube(url)
         if message.text.startswith == 'https://www.youtube.com/' or 'https://youtu.be/':
-            await bot.send_message(chat_id, f"Начинаю загрузку видео* : *{yt.title}*\n"
+            await bot.send_message(chat_id, f"*Начинаю загрузку видео* : *{yt.title}*\n"
             f"*С канала *: [{yt.author}]({yt.channel_url})")
             await download_yt_video(yt, message, bot)
     elif message.text[:2] in ['ym', 'Ym'] and config.M_C_ID == str(message.chat.id):
@@ -100,10 +100,10 @@ async def download_yt_video(yt, message, bot):
 
 async def download_yt_music(url, message, bot):
     yt = YouTube(url)
-    name = f"{yt.title}.mp3"
+    name = f"{message.chat.id}.mp3"
     yt.streams.filter(only_audio=True).first().download(filename=name)
     with open(f"{name}", 'rb') as audio:
-        await bot.send_audio(message.chat.id, audio, caption=f"{name}")
+        await bot.send_audio(message.chat.id, audio, caption=f"{yt.title}")
         os.remove(f"{name}")
 
 
