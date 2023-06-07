@@ -1,0 +1,12 @@
+#cp for /lib/systemd/system/tgBot.service
+[Unit]
+Description=Telegramm_bot Service
+After=multi-user.target
+Conflicts=getty@tty1.service
+[Service]
+PIDFile=/tmp/tgBot.pid
+User=dmitry
+Type=simple
+ExecStart=/home/dmitry/DmitryOl_bot/venv/bin/python3 /home/dmitry/DmitryOl_bot/bot.py
+[Install]
+WantedBy=multi-user.target
