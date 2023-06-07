@@ -26,5 +26,11 @@
 * #python3 -m venv venv 
 * source venv/bin/activate
 * pip install -r requirements.txt
+<br>
+<br>скопируйте файл tgBot.service в директорию /lib/systemd/system/ 
+<br>systemctl daemon-reload 
+<br>systemctl start tgBot
+<br>systemctl enabler tgBot
+<br>systemctl status tgBot
 
 
