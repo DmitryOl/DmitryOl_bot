@@ -7,6 +7,7 @@ Conflicts=getty@tty1.service
 PIDFile=/tmp/tgBot.pid
 User=dmitry
 Type=simple
+WorkingDirectory=/home/dmitry/DmitryOl_bot
 ExecStart=/home/dmitry/DmitryOl_bot/venv/bin/python3 /home/dmitry/DmitryOl_bot/bot.py
 [Install]
 WantedBy=multi-user.target
