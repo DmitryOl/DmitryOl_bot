@@ -98,13 +98,23 @@ async def download_yt_video(yt, message, bot):
         await bot.send_video(message.chat.id, video, caption=yt.title)
         os.remove(f"{message.chat.id}/{message.chat.id}")
 
+
 async def download_yt_music(url, message, bot):
     yt = YouTube(url)
-    name = f"{message.chat.id}.mp3"
+    name = re.sub('[^\w \.\,\?\!]+', '', f"{yt.title}")+".mp3"
+    await bot.send_message(message.chat.id, f"начинаем качать файл : {name}")
+    # name = f"{message.chat.id}.mp3"
     yt.streams.filter(only_audio=True).first().download(filename=name)
-    with open(f"{name}", 'rb') as audio:
-        await bot.send_audio(message.chat.id, audio, caption=f"{yt.title}")
-        os.remove(f"{name}")
+    weigh = round( os.path.getsize(f"{name}")/1048576 , 2)
+    try:
+        with open(f"{name}", 'rb') as audio:
+            await bot.send_audio(message.chat.id, audio, title=f"{yt.title}", caption=f"{yt.title} \n {weigh}Mb")
+
+    except Exception as e:
+        await bot.send_message(message.chat.id, f"ошибка : {e} \n {weigh}Mb")
+
+    os.remove(f"{name}")
+
 
 
 #вынести проверку в отдельный файл
